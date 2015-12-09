@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LazyTable demo</title>
+<style>
+body, html {
+  margin: 0;
+}
+
+.demo-div {
+  height: 100vh;
+  overflow: scroll;
+  margin-left: 10px;
+  width: 300px;
+}
+
+.lazytable-container {
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.demo-lazytable {
+}
+
+.demo-lazytable span {
+  display: inline-block;
+  padding-right: 0.2em;
+}
+
+.demo-lazytable-row {
+  height: 15px;  /* Important that this matches LazyTable row height */
+}
+
+div.tick-row>span span {
+  width: auto;
+  padding: 0;
+}
+</style>
+
+<script type="text/javascript" src="lazytable.js"></script>
+<script type="text/javascript">
+
+function create_row() {
+  var node = document.createElement('div');
+  node.className = 'demo-lazytable-row';
+
+  return {
+    node: node,
+  };
+}
+
+function configure_row(pos, row) {
+  var node = row.node;
+
+  node.innerText = pos;
+}
+
+window.onload = function() {
+  var div = document.createElement('div');
+  div.className = 'demo-div';
+  var t = new LazyTable(15, 2000000, div);
+  t.div.className = 'demo-lazytable';
+
+  t.create_row = create_row;
+  t.configure_row = configure_row;
+
+  div.addEventListener("scroll", function(e) {
+    console.log('scroll');
+    t.draw();
+  });
+
+  div.appendChild(t.container);
+  document.body.appendChild(div);
+
+  // Have LazyTable take the sizes of the host element, also would need to be
+  // done if the element is resized, etc.
+  t.layout();
+
+  t.draw();
+};
+
+</script>
+
+</head>
+
+<body>
+</body>
+</html>
